@@ -18,7 +18,7 @@ var server = http.createServer(function (req, res) {
         req.on('end', function() {
             if (req.url === '/') {
                 log('Received message: ' + body);
-            } else if (req.url = '/scheduled') {
+            } else if (req.url === '/scheduled') {
                 log('Received task ' + req.headers['x-aws-sqsd-taskname'] + ' scheduled at ' + req.headers['x-aws-sqsd-scheduled-at']);
             }
 
@@ -32,8 +32,7 @@ var server = http.createServer(function (req, res) {
     }
 });
 
-// Listen on port 3000, IP defaults to 127.0.0.1
-server.listen(port);
-
-// Put a friendly message on the terminal
-console.log('Server running at http://127.0.0.1:' + port + '/');
+// ✅ Bind to 0.0.0.0 so Beanstalk can access it
+server.listen(port, '0.0.0.0', () => {
+    console.log('Server running at http://0.0.0.0:' + port + '/');
+});
